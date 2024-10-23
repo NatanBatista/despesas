@@ -1,3 +1,4 @@
+import 'package:despesas/components/home/transactions_chart.dart';
 import 'package:despesas/components/home/transactions_form.dart';
 import 'package:despesas/components/home/transactions_list.dart';
 import 'package:despesas/models/transaction.dart';
@@ -15,6 +16,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _transactions = [
     ];
+  
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
+    }).toList();
+  }
 
   _addTransaction(String title, double value) {
     final newTransaction = Transaction(
@@ -50,9 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Card(
-              child: Text("Oi"),
-            ),
+            TransactionsChart(transactions: _recentTransactions,),
             TransactionsList(transactions: _transactions,),
           ]
         ),
